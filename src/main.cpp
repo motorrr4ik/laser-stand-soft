@@ -17,9 +17,9 @@ void setup() {
 
 void loop() {
     //--------wait signal from main PC, then send data value--------
+    diodeADCSignalRawValue = analogRead(DIODE_ADC_SIGNAL);
+    diodeADCFilteredSignalValue = Filters::signalMovingAverageFilter(diodeValues, diodeFilterCounter, diodeFilterSum, diodeADCSignalRawValue); //beguschee srednee filter
     if(Serial.available() > 0){
-      diodeADCSignalRawValue = analogRead(DIODE_ADC_SIGNAL);
-      diodeADCFilteredSignalValue = Filters::signalMovingAverageFilter(diodeValues, diodeFilterCounter, diodeFilterSum, diodeADCSignalRawValue); //beguschee srednee filter
       Serial.println(diodeADCFilteredSignalValue);
       Serial.read();
     }
