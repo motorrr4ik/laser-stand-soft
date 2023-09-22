@@ -1,27 +1,25 @@
 #include "Utils.hpp"
 #include "Filters.hpp"
-
+//--------diode interaction variables--------
 int diodeADCSignalRawValue = 0;
 int diodeADCFilteredSignalValue = 0;
 int diodeFilterCounter = 0;
 int diodeFilterSum = 0;
-
-int generatorValues[READ_CYCLE_AMOUNT] = {0};
 int diodeValues[READ_CYCLE_AMOUNT] = {0};
+//--------diode interaction variables--------
 
 void setup() {
+  //--------setup pins and serial port--------
   pinMode(DIODE_ADC_SIGNAL, INPUT);
-  pinMode(GENERATOR_SIGNAL_INPUT, INPUT);
-
-  Serial.begin(115200);
+  Serial.begin(SERIAL_PORT_SPEED);
   while(!Serial);
 }
 
 void loop() {
-  
+    //--------wait signal from main PC, then send data value--------
     if(Serial.available() > 0){
       diodeADCSignalRawValue = analogRead(DIODE_ADC_SIGNAL);
-      diodeADCFilteredSignalValue = Filters::signalMovingAverageFilter(diodeValues, diodeFilterCounter, diodeFilterSum, diodeADCSignalRawValue);
+      diodeADCFilteredSignalValue = Filters::signalMovingAverageFilter(diodeValues, diodeFilterCounter, diodeFilterSum, diodeADCSignalRawValue); //beguschee srednee filter
       Serial.println(diodeADCFilteredSignalValue);
       Serial.read();
     }
